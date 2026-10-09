@@ -1,0 +1,19 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/cfg.mak b/cfg.mak
+index 12f6b93eb..d38009de4 100644
+--- a/cfg.mak
++++ b/cfg.mak
+@@ -213,10 +213,9 @@ CFG_HI_BUILD_WITH_KEYLED=y
+ #
+ # Kernel
+ #
+-# CFG_LINUX-3.18.y is not set
+-# CFG_LINUX-4.435 is not set
+-CFG_LINUX-5.15.134=y
+-CFG_HI_KERNEL_VERSION=linux-5.15.134
++# CFG_LINUX-5.15.134 is not set
++CFG_LINUX-6.12-full=y
++CFG_HI_KERNEL_VERSION=linux-6.12-full
+ CFG_HI_KERNEL_CFG=hi3798mv100_defconfig
+ # CFG_HI_FS_BUILDIN is not set
+ # CFG_HI_MSP_BUILDIN is not set

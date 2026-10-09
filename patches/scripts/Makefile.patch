@@ -1,0 +1,60 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/scripts/Makefile b/scripts/Makefile
+index 8db4f4bb6..50513b5ce 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -187,10 +187,8 @@ ifeq ($(CFG_HI_ADAC_TVL320AIC31_SUPPORT),y)
+ 	$(AT)echo "insmod hi_tlv320.ko" >> $(HI_MODULE_DIR)/load
+ endif
+ 
+-# deleted by huxm 20260625
+-# ifeq ($(CFG_HI_KERNEL_VERSION),linux-3.18.y)
+-# replaced by huxm 20260625
+-ifeq ($(CFG_HI_KERNEL_VERSION),linux-5.15.134)
++# updated by huxm on 2026-10-09
++ifeq (($(CFG_HI_KERNEL_VERSION),linux-5.15.134) || ($(CFG_HI_KERNEL_VERSION),linux-6.12-full))
+ 	$(AT)echo "insmod ./usb/ehci-platform.ko" >> $(HI_MODULE_DIR)/load
+ 	$(AT)echo "insmod ./usb/ohci-platform.ko" >> $(HI_MODULE_DIR)/load
+ 
+@@ -201,7 +199,7 @@ endif
+ 
+ ifeq ($(SATA_SUPPORT),y)
+ 	$(AT)echo "insmod ./sata/libahci.ko" >> $(HI_MODULE_DIR)/load
+-ifeq ($(CFG_HI_KERNEL_VERSION),linux-3.18.y)
++ifeq (($(CFG_HI_KERNEL_VERSION),linux-5.15.134) || ($(CFG_HI_KERNEL_VERSION),linux-6.12-full))
+ 	$(AT)echo "insmod ./sata/libahci_platform.ko" >> $(HI_MODULE_DIR)/load
+ endif
+ 	$(AT)echo "insmod ./sata/ahci_platform.ko" >> $(HI_MODULE_DIR)/load
+@@ -235,10 +233,8 @@ ifeq ($(CFG_HI_NVR_SUPPORT),y)
+ 	$(AT)echo "echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor" >> $(HI_MODULE_DIR)/load
+ 	$(AT)echo "echo 1200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed" >> $(HI_MODULE_DIR)/load
+ else
+-# The interactive governor was removed in Linux 5.15; use conservative instead.(by huxm 20260830)
+-# 	$(AT)echo "echo interactive > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor" >> $(HI_MODULE_DIR)/load
++# The interactive governor was removed in Linux 5.15; use conservative instead.(by huxm on 2026-08-30)
+ 	$(AT)echo "echo conservative  > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor" >> $(HI_MODULE_DIR)/load
+-# 	$(AT)echo "echo 200000 > /sys/devices/system/cpu/cpufreq/interactive/timer_rate" >> $(HI_MODULE_DIR)/load
+ 	$(AT)echo "echo 10000 > /sys/devices/system/cpu/cpufreq/conservative/sampling_rate" >> $(HI_MODULE_DIR)/load
+ 	$(AT)echo "echo    10 > /sys/devices/system/cpu/cpufreq/conservative/freq_step" >> $(HI_MODULE_DIR)/load
+ endif
+@@ -270,16 +266,15 @@ endif
+ 
+ ifeq ($(SATA_SUPPORT),y)
+ 	$(AT)echo "rmmod ahci_platform" >> $(HI_MODULE_DIR)/unload
+-ifeq ($(CFG_HI_KERNEL_VERSION),linux-3.18.y)
++# updated by huxm on 2026-10-09
++ifeq (($(CFG_HI_KERNEL_VERSION),linux-5.15.134) || ($(CFG_HI_KERNEL_VERSION),linux-6.12-full))
+ 	$(AT)echo "rmmod libahci_platform" >> $(HI_MODULE_DIR)/unload
+ endif
+ 	$(AT)echo "rmmod libahci" >> $(HI_MODULE_DIR)/unload
+ endif
+ 
+-# deleted by huxm 20260625
+-# ifeq ($(CFG_HI_KERNEL_VERSION),linux-3.18.y)
+-# replaced by huxm 20260625
+-ifeq ($(CFG_HI_KERNEL_VERSION),linux-5.15.134)
++# updated by huxm on 2026-10-09
++ifeq (($(CFG_HI_KERNEL_VERSION),linux-5.15.134) || ($(CFG_HI_KERNEL_VERSION),linux-6.12-full))
+ ifeq ($(USB3_SUPPORT),y)
+ 	$(AT)echo "rmmod xhci-plat-hcd" >> $(HI_MODULE_DIR)/unload
+ endif

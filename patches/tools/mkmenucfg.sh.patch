@@ -1,0 +1,14 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/tools/mkmenucfg.sh b/tools/mkmenucfg.sh
+index b534d420c..fdd8c4cd9 100755
+--- a/tools/mkmenucfg.sh
++++ b/tools/mkmenucfg.sh
+@@ -8,7 +8,7 @@
+ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+ # 假设内核源码目录与脚本所在目录的相对位置是固定的
+ # 根据问题描述，脚本可能位于/home/u2204/histb下，内核源码在其子目录中
+-KERNEL_DIR="${SCRIPT_DIR}/../source/kernel/linux-5.15.134"
++KERNEL_DIR="${SCRIPT_DIR}/../source/kernel/linux-6.12-full"
+ RETURN_DIR="${SCRIPT_DIR}" # 返回目录就是脚本所在目录
+ # 保存配置文件的目录，基于内核目录的相对路径
+ SAVE_DIR="arch/arm/configs"

@@ -1,0 +1,14 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/base.mak b/base.mak
+index d777f3e7a..b59b7503c 100644
+--- a/base.mak
++++ b/base.mak
+@@ -1,7 +1,4 @@
+-# deleted by huxm 20231228
+-# CFG_HI_SDK_VERSION="HiSTBLinuxV100R005C00SPC041B020_20161028"     
+-# added by huxm 20231228
+-CFG_HI_SDK_VERSION="HiSTBLinuxV100R005C09SPC090_20231228" 
++CFG_HI_SDK_VERSION="HiSTBLinuxV100R005C0ASPC090_20261009" 
+ 
+ ifeq ($(SDK_CFGFILE),)
+ SDK_CFGFILE=cfg.mak

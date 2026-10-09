@@ -1,0 +1,14 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/tools/gen_diff_patch.sh b/tools/gen_diff_patch.sh
+index 98034da14..0a2c256ed 100755
+--- a/tools/gen_diff_patch.sh
++++ b/tools/gen_diff_patch.sh
+@@ -10,7 +10,7 @@ for c in "$OLDCOMMIT" "$NEWCOMMIT"; do
+     git rev-parse --verify --quiet "${c}^{commit}" >/dev/null || { echo "错误: 无效 commit: $c"; exit 1; }
+ done
+ 
+-rm -rf "$OUT_DIR"; mkdir -p "$OUT_DIR"
++# rm -rf "$OUT_DIR"; mkdir -p "$OUT_DIR"
+ TS="$(date '+%F %T')"
+ count=0
+ 

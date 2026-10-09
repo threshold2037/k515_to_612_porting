@@ -1,0 +1,53 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/scripts/kconfig/Kconfig.kernel b/scripts/kconfig/Kconfig.kernel
+index c741f8031..5f4775e41 100755
+--- a/scripts/kconfig/Kconfig.kernel
++++ b/scripts/kconfig/Kconfig.kernel
+@@ -1,32 +1,32 @@
+ #+++++++++++++++++++++++++++++++++++++++++++++++++++
+ choice
+     prompt "Kernel Version"
+-    default LINUX-3.18.y
++### updated by huxm on 2026-10-09
++    default linux-6.12-full
+ 
+-config  LINUX-3.18.y
+-    bool "linux-3.18.y"
+-    depends on HI3716MV410 || HI3716MV420 || HI3798MV100 || HI3796MV100 || HI3716DV100 || HI3798CV200 || HI3798MV200 || HI3798MV200_A || HI3796MV200
+-
+-### modify by huxm 20231209
+-config  LINUX-4.435
+-    bool "linux-4.435"
+-    depends on HI3716MV410 || HI3716MV420 || HI3798MV100 || HI3796MV100 || HI3716DV100 || HI3798CV200 || HI3798MV200 || HI3798MV200_A || HI3796MV200
+-
+-### modify by huxm 20231210 
++### added by huxm on 2023-12-10
+ config  LINUX-5.15.134
+     bool "linux-5.15.134"
+     depends on HI3716MV410 || HI3716MV420 || HI3798MV100 || HI3796MV100 || HI3716DV100 || HI3798CV200 || HI3798MV200 || HI3798MV200_A || HI3796MV200
+ 
++### added by huxm on 2026-10-09
++config  linux-6.12-full
++    bool "linux-6.12-full"
++    depends on HI3716MV410 || HI3716MV420 || HI3798MV100 || HI3796MV100 || HI3716DV100 || HI3798CV200 || HI3798MV200 || HI3798MV200_A || HI3796MV200
++
+ endchoice
+ 
+ config  HI_KERNEL_VERSION
+     string
+-    default linux-3.18.y if LINUX-3.18.y
+-### modify by huxm 20231209
+-    default linux-4.435 if LINUX-4.435
+-### modify by huxm 20231210
++### updated by huxm on 2026-10-09
++    default linux-6.12-full if linux-6.12-full
++
++### added by huxm on 2023-12-10
+     default linux-5.15.134 if LINUX-5.15.134
+ 
++### added by huxm on 2026-10-09
++    default linux-6.12-full if linux-6.12-full
++
+ config  HI_KERNEL_CFG
+     prompt "Kernel Config File"
+     string

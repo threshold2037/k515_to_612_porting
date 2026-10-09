@@ -1,0 +1,14 @@
+===== 2026-10-09 22:59:26 =====
+diff --git a/tools/tarpackage.sh b/tools/tarpackage.sh
+index 042fd905d..57a254d92 100755
+--- a/tools/tarpackage.sh
++++ b/tools/tarpackage.sh
+@@ -12,7 +12,7 @@ cd "$OUTSIDE_DIR" || exit 1
+ # .gitignore \
+ # $(git ls-files --ignored --others --exclude-standard)
+ 
+-tar -I 'xz -9 --extreme -T0' -cvf HiSTBLinuxV100R005C09SPC090.tar.xz -T <(
++tar -I 'xz -9 --extreme -T0' -cvf HiSTBLinuxV100R005C0ASPC090.tar.xz -T <(
+     git -C histb/ ls-files --ignored --others --exclude-standard | sed 's|^|histb/|'
+     echo "histb/.git"
+     echo "histb/tools/tarpackage.sh"
