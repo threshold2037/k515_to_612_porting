@@ -1,0 +1,29 @@
+===== 2026-10-11 21:56:10 =====
+diff --git a/source/kernel/linux-6.12-full/arch/arm/Kconfig b/source/kernel/linux-6.12-full/arch/arm/Kconfig
+index 51c6b2db9..1cd6f3a3b 100644
+--- a/source/kernel/linux-6.12-full/arch/arm/Kconfig
++++ b/source/kernel/linux-6.12-full/arch/arm/Kconfig
+@@ -1419,6 +1419,23 @@ config DEPRECATED_PARAM_STRUCT
+ 	  This was deprecated in 2001 and announced to live on for 5 years.
+ 	  Some old boot loaders still use this way.
+ 
++# added by huxm on 2026-10-10
++config BUILD_ARM_APPENDED_DTB_IMAGE
++	bool "Build a concatenated zImage/dtb by default"
++	depends on OF
++	help
++	  Enabling this option will cause a concatenated zImage and list of
++	  DTBs to be built by default (instead of a standalone zImage.)
++	  The image will built in arch/arm/boot/zImage-dtb
++
++config BUILD_ARM_APPENDED_DTB_IMAGE_NAMES
++	string "Default dtb names"
++	depends on BUILD_ARM_APPENDED_DTB_IMAGE
++	help
++	  Space separated list of names of dtbs to append when
++	  building a concatenated zImage-dtb.
++# end of added
++
+ # Compressed boot loader in ROM.  Yes, we really want to ask about
+ # TEXT and BSS so we preserve their values in the config files.
+ config ZBOOT_ROM_TEXT

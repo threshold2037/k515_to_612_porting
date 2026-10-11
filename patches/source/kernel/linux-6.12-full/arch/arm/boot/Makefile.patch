@@ -1,0 +1,65 @@
+===== 2026-10-11 21:56:10 =====
+diff --git a/source/kernel/linux-6.12-full/arch/arm/boot/Makefile b/source/kernel/linux-6.12-full/arch/arm/boot/Makefile
+index ba9b9a802..bdfb99a3b 100644
+--- a/source/kernel/linux-6.12-full/arch/arm/boot/Makefile
++++ b/source/kernel/linux-6.12-full/arch/arm/boot/Makefile
+@@ -12,6 +12,15 @@
+ #
+ OBJCOPYFLAGS	:=-O binary -R .comment -S
+ 
++# added by huxm on 2026-10-11
++ifneq ($(MACHINE),)
++include $(srctree)/$(MACHINE)/Makefile.boot  
++endif
++ZRELADDR := $(zreladdr-y) 
++PARAMS_PHYS := $(params_phys-y) 
++# end of added
++
++
+ #   ZRELADDR == virt_to_phys(PAGE_OFFSET + TEXT_OFFSET)
+ ifdef CONFIG_PHYS_OFFSET
+ add_hex = $(shell printf 0x%x $$(( $(1) + $(2) )) )
+@@ -79,7 +88,8 @@ if [ $(words $(UIMAGE_LOADADDR)) -ne 1 ]; then \
+ 	false; \
+ fi
+ 
+-$(obj)/uImage:	$(obj)/zImage FORCE
++# updated "zImage" to "zImage-dtb" by huxm on 2026-10-10 
++$(obj)/uImage:	$(obj)/zImage-dtb FORCE
+ 	@$(check_for_multiple_loadaddr)
+ 	$(call if_changed,uimage)
+ 
+@@ -90,3 +100,33 @@ $(obj)/bootpImage: $(obj)/bootp/bootp FORCE
+ 	$(call if_changed,objcopy)
+ 
+ subdir-	    := bootp compressed dts
++
++# --- appended DTB for legacy U-Boot (huxm 2026-10-10) ---
++DTB_NAMES := $(subst $\",,$(CONFIG_BUILD_ARM_APPENDED_DTB_IMAGE_NAMES))
++ifneq ($(DTB_NAMES),)
++DTB_LIST := $(addsuffix .dtb,$(DTB_NAMES))
++else
++DTB_LIST := $(dtb-y)
++endif
++DTB_OBJS := $(addprefix $(obj)/dts/hisilicon/,$(DTB_LIST))
++
++targets += zImage-dtb
++
++# 6.12 主线已删除 cmd_cat
++quiet_cmd_cat = CAT     $@
++      cmd_cat = cat $(filter-out FORCE,$^) > $@
++
++$(obj)/zImage-dtb: $(obj)/zImage $(DTB_OBJS) FORCE
++	$(call if_changed,cat)
++	@$(kecho) '  Kernel: $@ is ready'
++
++# 6.12: dts 目录没有 dtbs 目标，dtb 走 always-y，用默认目标递归即可
++$(DTB_OBJS): FORCE
++	$(Q)$(MAKE) $(build)=$(obj)/dts
++
++# ifneq ($(MACHINE),)
++# include $(srctree)/$(MACHINE)/Makefile.boot      
++# endif
++# ZRELADDR := $(zreladdr-y)                         
++
++# --- end ---

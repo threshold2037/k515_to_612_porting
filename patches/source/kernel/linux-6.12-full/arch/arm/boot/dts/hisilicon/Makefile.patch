@@ -1,0 +1,27 @@
+===== 2026-10-11 21:56:10 =====
+diff --git a/source/kernel/linux-6.12-full/arch/arm/boot/dts/hisilicon/Makefile b/source/kernel/linux-6.12-full/arch/arm/boot/dts/hisilicon/Makefile
+index 5ce0512c0..8e50c77d1 100644
+--- a/source/kernel/linux-6.12-full/arch/arm/boot/dts/hisilicon/Makefile
++++ b/source/kernel/linux-6.12-full/arch/arm/boot/dts/hisilicon/Makefile
+@@ -5,9 +5,19 @@ dtb-$(CONFIG_ARCH_HIP01) += \
+ 	hip01-ca9x2.dtb
+ dtb-$(CONFIG_ARCH_HIP04) += \
+ 	hip04-d01.dtb
+-dtb-$(CONFIG_ARCH_HISI) += \
+-	hi3519-demb.dtb
++
++# removed by huxm on 2026-10-11
++# dtb-$(CONFIG_ARCH_HISI) += \
++	hi3519-demb.dtb		
++# end  of removed
++
+ dtb-$(CONFIG_ARCH_HIX5HD2) += \
+ 	hisi-x5hd2-dkb.dtb
+ dtb-$(CONFIG_ARCH_SD5203) += \
+ 	sd5203.dtb
++
++# added by huxm on 2026-10-10
++dtb-$(CONFIG_ARCH_HI3798MX) += \
++	hi3798mv100.dtb
++# end of added
++

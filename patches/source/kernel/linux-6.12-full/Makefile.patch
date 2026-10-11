@@ -1,0 +1,26 @@
+===== 2026-10-11 21:56:10 =====
+diff --git a/source/kernel/linux-6.12-full/Makefile b/source/kernel/linux-6.12-full/Makefile
+index 6f7b25c64..6771ea66f 100644
+--- a/source/kernel/linux-6.12-full/Makefile
++++ b/source/kernel/linux-6.12-full/Makefile
+@@ -546,6 +546,11 @@ USERINCLUDE    := \
+                 -include $(srctree)/include/linux/compiler-version.h \
+                 -include $(srctree)/include/linux/kconfig.h
+ 
++# added by huxm on 2026-10-11
++USERINCLUDE	+= \
++		-I$(srctree)/arch/arm/mach-hi3798mx/include
++# end of added 
++
+ # Use LINUXINCLUDE when you must reference the include/ directory.
+ # Needed to be compatible with the O= option
+ LINUXINCLUDE    := \
+@@ -555,6 +560,8 @@ LINUXINCLUDE    := \
+ 		-I$(objtree)/include \
+ 		$(USERINCLUDE)
+ 
++
++
+ KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
+ 
+ KBUILD_CFLAGS :=

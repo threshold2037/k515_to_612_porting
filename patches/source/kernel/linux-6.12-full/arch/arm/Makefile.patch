@@ -1,0 +1,51 @@
+===== 2026-10-11 21:56:10 =====
+diff --git a/source/kernel/linux-6.12-full/arch/arm/Makefile b/source/kernel/linux-6.12-full/arch/arm/Makefile
+index dee8c9fe2..b083a1136 100644
+--- a/source/kernel/linux-6.12-full/arch/arm/Makefile
++++ b/source/kernel/linux-6.12-full/arch/arm/Makefile
+@@ -187,7 +187,7 @@ machine-$(CONFIG_ARCH_EXYNOS)		+= exynos
+ machine-$(CONFIG_ARCH_FOOTBRIDGE)	+= footbridge
+ machine-$(CONFIG_ARCH_GEMINI)		+= gemini
+ machine-$(CONFIG_ARCH_HIGHBANK)		+= highbank
+-machine-$(CONFIG_ARCH_HISI)		+= hisi
++# machine-$(CONFIG_ARCH_HISI)		+= hisi		// removed by huxm on 2026-10-11
+ machine-$(CONFIG_ARCH_HPE)		+= hpe
+ machine-$(CONFIG_ARCH_IXP4XX)		+= ixp4xx
+ machine-$(CONFIG_ARCH_KEYSTONE)		+= keystone
+@@ -227,6 +227,23 @@ machine-$(CONFIG_ARCH_ZYNQ)		+= zynq
+ machine-$(CONFIG_PLAT_VERSATILE)	+= versatile
+ machine-$(CONFIG_PLAT_SPEAR)		+= spear
+ 
++# added ARCH_HI3798MX by huxm on 2026-10-10
++machine-$(CONFIG_ARCH_HI3798MX)		+= hi3798mx		
++# machine-$(CONFIG_ARCH_HI3798CV2X)	+= hi3798cv2x
++# machine-$(CONFIG_ARCH_HI3798MV2X)	+= hi3798mv2x
++# machine-$(CONFIG_ARCH_HI3796MV2X)	+= hi3796mv2x
++
++ifeq ($(CONFIG_ARCH_MULTIPLATFORM),y)
++MACHINE  :=
++endif
++ifneq ($(machine-y),)
++MACHINE  := arch/arm/mach-$(word 1,$(machine-y))/
++else
++MACHINE  :=
++endif
++export MACHINE
++# end of added 
++
+ # legacy platforms provide their own mach/*.h headers globally,
+ # these three are mutually exclusive
+ machdirs-$(CONFIG_ARCH_FOOTBRIDGE)	+= arch/arm/mach-footbridge
+@@ -252,6 +269,12 @@ libs-y				:= arch/arm/lib/ $(libs-y)
+ boot := arch/arm/boot
+ ifeq ($(CONFIG_XIP_KERNEL),y)
+ KBUILD_IMAGE := $(boot)/xipImage
++
++# added by huxm on 2026-10-10
++else ifeq ($(CONFIG_BUILD_ARM_APPENDED_DTB_IMAGE),y)
++KBUILD_IMAGE := $(boot)/zImage-dtb
++# end of added
++
+ else
+ KBUILD_IMAGE := $(boot)/zImage
+ endif
