@@ -1,0 +1,19 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/atags/atags2fdt.c b/source/kernel/linux-6.12-full/drivers/hisilicon/atags/atags2fdt.c
+index b5c3e3d8d..d628ba8af 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/atags/atags2fdt.c
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/atags/atags2fdt.c
+@@ -22,7 +22,13 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/libfdt.h>
++
++/* added "#include <asm/page.h>" by huxm on 2026-10-11	*/
++#include <asm/page.h>	
+ #include <asm/memory.h>
++/* linux-5.15 的 arch/arm/include/asm/memory.h——只有一句注释
++"Note: this file should not be included by non-asm/.h files",没有 #error。到 linux-6.12 才变成强制报错
++end of added */
+ #include <linux/hisilicon/himisc.h>
+ 
+ #include "setup.h"

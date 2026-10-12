@@ -1,0 +1,59 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/misc/hw_breakpoint.c b/source/kernel/linux-6.12-full/drivers/hisilicon/misc/hw_breakpoint.c
+index f987d37ce..6cb9b6073 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/misc/hw_breakpoint.c
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/misc/hw_breakpoint.c
+@@ -33,13 +33,13 @@
+ #include <linux/hw_breakpoint.h>
+ #include <asm/hw_breakpoint.h>
+ #include <linux/kthread.h>
+-#include <uapi/linux/sched/types.h>		// added by huxm 20231217
++#include <uapi/linux/sched/types.h>		// added by huxm on 2023-12-17
+ 
+-// added by huxm 20231219
++// added by huxm on 2023-12-19
+ #define __set_task_state(tsk, state_value)            \
+       do { (tsk)->__state = state_value; } while (0)
+ 
+-//end 
++//end of added 
+ 
+ struct bpinfo {
+ #define BP_NULL      0
+@@ -303,7 +303,7 @@ void add_hw_breakpoint_async(char *bp_sym, ulong bp_addr, char *type)
+ 	__wakeup(&__bpsem);
+ }
+ /******************************************************************************/
+-extern int show_regs(struct pt_regs *);		// added by huxm 20231217
++extern int show_regs(struct pt_regs *);		// added by huxm on 2023-12-17
+ static void hw_break_handler(struct perf_event *bf_event,
+ 			     struct perf_sample_data *data, struct pt_regs *regs)
+ {
+@@ -579,10 +579,14 @@ static ssize_t bp_fops_write(struct file *filp, const char __user *ubuf,
+ }
+ /******************************************************************************/
+ 
+-static struct file_operations bp_fops = {
++static const struct file_operations bp_fops = {
+ 	.read  = bp_fops_read,
+ 	.write = bp_fops_write,
+-	.llseek = no_llseek,
++//	.llseek = no_llseek,		// removed by huxm on 2026-10-11
++/*
++	linux-6.12 .llseek == NULL → 内核自动清掉 FMODE_LSEEK → lseek() 返回 -ESPIPE，
++	和 linux-5.15 里 .llseek = no_llseek 的行为逐位一致。
++*/
+ };
+ 
+ /******************************************************************************/
+@@ -592,8 +596,8 @@ static int hw_breakpoint_func(void *arg)
+ 	int ret;
+ 	ulong flags;
+ 	struct bpinfo *bpi;
+-	//struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };		// comment huxm 20231217
+-	static const struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };	// added "static const" huxm 20231217
++	// struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };			// removed huxm on 2023-12-17
++	static const struct sched_param param = { .sched_priority = MAX_RT_PRIO - 1 };	// added "static const" huxm on 2023-12-17
+ 	
+ 	sched_setscheduler_nocheck(current, SCHED_FIFO,&param);		
+ 

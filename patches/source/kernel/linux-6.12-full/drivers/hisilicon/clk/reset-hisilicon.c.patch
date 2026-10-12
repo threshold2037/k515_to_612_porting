@@ -1,0 +1,22 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/clk/reset-hisilicon.c b/source/kernel/linux-6.12-full/drivers/hisilicon/clk/reset-hisilicon.c
+index 348d8b9cf..7b08f3710 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/clk/reset-hisilicon.c
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/clk/reset-hisilicon.c
+@@ -216,13 +216,14 @@ static int hisilicon_reset_probe(struct platform_device *pdev)
+ 	return reset_controller_register(&data->rcdev);
+ }
+ 
+-static int hisilicon_reset_remove(struct platform_device *pdev)
++// static int hisilicon_reset_remove(struct platform_device *pdev)	// removed in linux-6.12 by huxm on 2026-10-11
++static void hisilicon_reset_remove(struct platform_device *pdev)	// replaced in linux-6.12 by huxm on 2026-10-11
+ {
+ 	struct hisilicon_reset_data *data = platform_get_drvdata(pdev);
+ 
+ 	reset_controller_unregister(&data->rcdev);
+ 
+-	return 0;
++	// return 0;													// removed in linux-6.12 by huxm on 2026-10-11		
+ }
+ 
+ static struct platform_driver hisilicon_reset_driver = {

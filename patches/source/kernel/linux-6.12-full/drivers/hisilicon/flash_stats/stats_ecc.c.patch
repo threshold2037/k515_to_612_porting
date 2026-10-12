@@ -1,0 +1,18 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_ecc.c b/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_ecc.c
+index cf85e5a32..a98ff5a55 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_ecc.c
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_ecc.c
+@@ -226,7 +226,11 @@ static struct file_operations stats_ecc_fops = {
+ 	.read  = stats_ecc_fops_read,
+ 	.write = stats_ecc_fops_write,
+ 	.owner = THIS_MODULE,
+-	.llseek = no_llseek,
++	// .llseek = no_llseek,		// removed by huxm on 2026-10-11
++/*
++	linux-6.12 .llseek == NULL → 内核自动清掉 FMODE_LSEEK → lseek() 返回 -ESPIPE，
++	和 linux-5.15 里 .llseek = no_llseek 的行为逐位一致。
++*/
+ 	.release = stats_ecc_fops_release,
+ };
+ /******************************************************************************/

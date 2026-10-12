@@ -1,0 +1,14 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/Makefile b/source/kernel/linux-6.12-full/drivers/Makefile
+index 45d1c3e63..6fad1b0c2 100644
+--- a/source/kernel/linux-6.12-full/drivers/Makefile
++++ b/source/kernel/linux-6.12-full/drivers/Makefile
+@@ -195,3 +195,8 @@ obj-$(CONFIG_CDX_BUS)		+= cdx/
+ obj-$(CONFIG_DPLL)		+= dpll/
+ 
+ obj-$(CONFIG_S390)		+= s390/
++
++# added by huxm on 2026-10-11
++obj-y				+= hisilicon/	
++
++# end of added

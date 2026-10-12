@@ -1,0 +1,24 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/cma/hi_cma.c b/source/kernel/linux-6.12-full/drivers/hisilicon/cma/hi_cma.c
+index 24d9748de..8642e2f27 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/cma/hi_cma.c
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/cma/hi_cma.c
+@@ -58,14 +58,16 @@ static int __init hisi_mmz_parse_cmdline(char *s)
+ 
+ 		hisi_zone[num_zones].pdev.coherent_dma_mask = DMA_BIT_MASK(64);
+ 		if (i == 4) {
+-			strlcpy(hisi_zone[num_zones].name, argv[0], NAME_LEN_MAX);
++			// strlcpy(hisi_zone[num_zones].name, argv[0], NAME_LEN_MAX);	removed by huxm on 2026-10-11
++			strscpy(hisi_zone[num_zones].name, argv[0], NAME_LEN_MAX);		// replaced by huxm on 2026-10-11
+ 			hisi_zone[num_zones].gfp = memparse(argv[2], NULL);
+ 			hisi_zone[num_zones].phys_start = memparse(argv[2], NULL);
+ 			hisi_zone[num_zones].nbytes = memparse(argv[3], NULL);
+ 		}
+ 
+ 		else if (i == 6) {
+-			strlcpy(hisi_zone[num_zones].name, argv[0], NAME_LEN_MAX);
++			// strlcpy(hisi_zone[num_zones].name, argv[0], NAME_LEN_MAX);	removed by huxm on 2026-10-11
++			strscpy(hisi_zone[num_zones].name, argv[0], NAME_LEN_MAX);		// replaced by huxm on 2026-10-11
+ 			hisi_zone[num_zones].gfp = memparse(argv[1], NULL);
+ 			hisi_zone[num_zones].phys_start = memparse(argv[2], NULL);
+ 			hisi_zone[num_zones].nbytes = memparse(argv[3], NULL);

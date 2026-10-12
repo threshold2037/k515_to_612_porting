@@ -1,0 +1,18 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_rwe.c b/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_rwe.c
+index b0bafa9c9..2fa19a6c4 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_rwe.c
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/flash_stats/stats_rwe.c
+@@ -279,7 +279,11 @@ static struct file_operations stats_rwe_fops = {
+ 	.read  = stats_rwe_fops_read,
+ 	.write = stats_rwe_fops_write,
+ 	.owner = THIS_MODULE,
+-	.llseek = no_llseek,
++	// .llseek = no_llseek,		// removed by huxm on 2026-10-11
++/*
++	linux-6.12 .llseek == NULL → 内核自动清掉 FMODE_LSEEK → lseek() 返回 -ESPIPE，
++	和 linux-5.15 里 .llseek = no_llseek 的行为逐位一致。
++*/
+ 	.release = stats_rwe_fops_release,
+ };
+ /******************************************************************************/

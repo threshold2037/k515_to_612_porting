@@ -1,0 +1,72 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/soc/hi3798mv100/hipm_sleep.S b/source/kernel/linux-6.12-full/drivers/hisilicon/soc/hi3798mv100/hipm_sleep.S
+index b9c88f7bc..c68141a84 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/soc/hi3798mv100/hipm_sleep.S
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/soc/hi3798mv100/hipm_sleep.S
+@@ -1,6 +1,13 @@
+ #include <mach/platform.h>
+ #include <mach/hardware.h>
++
++/* added "#include <asm/page.h>" by huxm on 2026-10-11	*/
++#include <asm/page.h>		
+ #include <asm/memory.h>
++/* linux-5.15 的 arch/arm/include/asm/memory.h——只有一句注释
++"Note: this file should not be included by non-asm/.h files",没有 #error。到 linux-6.12 才变成强制报错
++end of added */
++
+ #include <linux/linkage.h>
+ 
+ #define __virt_to_phys(x)   ((x) - PAGE_OFFSET + PLAT_PHYS_OFFSET)
+@@ -441,13 +448,47 @@ l1_way_loop:
+ 	mov	r1, #0                   /* r1->set counter */
+ l1_line_loop:
+ 	mov	r2, r0, LSL #30
+-/*	Error: garbage following instruction -- `orr r2,r1,LSL#5' using gcc-12	*/
+-//	orr	r2, r1, LSL #5           /* r2->set/way cache-op format */
+-/*	instead of following instruction		*/
+-	mov r4,#5
++/* ============================================================
++ * 构造 CP15 "按 set/way 维护 cache" 指令需要的操作数
++ * ------------------------------------------------------------
++ * 目标指令形如：
++ *     mcr p15, 0, r2, c7, c6, 2    @ DCISW  按 set/way 失效数据 cache
++ *     mcr p15, 0, r2, c7, c14, 2   @ DCCISW 按 set/way 清+失效
++ *
++ * r2 中操作数的位域布局(ARMv7-A ARM, set/way 格式):
++ *     [31 : 32-A]  Way    编号, A = log2(cache 相联路数)
++ *     [32-A-1 : L] Set    编号(即 index)
++ *     [L-1 : 0]    保留，必须为 0
++ *
++ * 本条指令做的事：把 set 编号左移 L 位后并入 r2
++ *     r2 = r2 | (r1 << L)
++ *
++ * 其中：
++ *     r1 = 当前 set 编号（外层循环计数器，本指令不得破坏）
++ *     r2 = 已预先装好 way<<(32-A)的半成品，本指令执行完后即为完整 set/way 值
++ *     L  = log2(cache line 字节数) = CCSIDR.LineSize[2:0] + 4
++ *          例:32 字节行 → LineSize 字段 = 1 → L = 1+4 = 5,即这里的 #5
++ *
++ * 注意两点：
++ *   1. 必须写成 UAL 三操作数形式 "Rd, Rn, Rm, shift"。
++ *      老写法 "orr r2, r1, lsl #5" 是 pre-UAL 的省略式(隐含 Rn=Rd),
++ *      gcc-12/binutils 用的统一汇编语法不再接受，且在 Thumb-1 下会被
++ *      当成 "orr r2, r1" 解析完，剩下的 ", lsl #5" 报
++ *      "garbage following instruction"。
++ *   2. 本指令无副作用：不改 r1、不额外占用寄存器、Thumb-2 下用 ORR.W
++ *      不置标志位，可安全放进 IT 条件块。
++ 	mov r4,#5
+ 	LSL r1,r4
+ 	orr r2,r1
+-/*	instruction end by huxm 20231217*/	
++ * ============================================================ */
++//	orr	r2, r1, LSL #5           /* r2->set/way cache-op format */
++		#if defined(__thumb__) && !defined(__thumb2__)   /* Thumb-1 */
++	lsls	r4, r1, #5
++	orrs	r2, r2, r4
++		#else                                            /* ARM / Thumb-2 */
++	orr	r2, r2, r1, lsl #5
++		#endif
++/*	end of updated by huxm on 2023-12-17		*/	
+ 
+ 	mcr	p15, 0, r2, c7, c6, 2    /* Invalidate line described by r2 */
+ 	add	r1, r1, #1               /* Increment set counter */

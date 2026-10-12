@@ -1,0 +1,13 @@
+===== 2026-10-12 23:10:21 =====
+diff --git a/source/kernel/linux-6.12-full/drivers/hisilicon/misc/Makefile b/source/kernel/linux-6.12-full/drivers/hisilicon/misc/Makefile
+index 58da6fa96..5ac7e1be1 100644
+--- a/source/kernel/linux-6.12-full/drivers/hisilicon/misc/Makefile
++++ b/source/kernel/linux-6.12-full/drivers/hisilicon/misc/Makefile
+@@ -1,6 +1,6 @@
+ 
+ obj-$(CONFIG_MTD_BLOCK_ROMBLOCK)	+= romblock.o
+-obj-y					+= export_sym.o
++# obj-y					+= export_sym.o				removed by huxm on 2026-10-11
+ obj-$(CONFIG_PART_CHANGE)		+= part-change.o
+ obj-$(CONFIG_HI_I2C)			+= i2c-hisi.o
+ obj-$(CONFIG_ARCH_HI3798MV2X)		+= ddr_watchpoint.o ddr_watchzone.o
