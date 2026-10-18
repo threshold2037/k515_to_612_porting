@@ -1,33 +1,17 @@
-===== 2026-10-11 21:56:10 =====
+===== 2026-10-18 22:57:24 =====
 diff --git a/source/kernel/linux-6.12-full/arch/arm/mach-hisi/Kconfig b/source/kernel/linux-6.12-full/arch/arm/mach-hisi/Kconfig
-index 7b3440687..31d6e44b0 100644
+index 31d6e44b0..1a4fa83d2 100644
 --- a/source/kernel/linux-6.12-full/arch/arm/mach-hisi/Kconfig
 +++ b/source/kernel/linux-6.12-full/arch/arm/mach-hisi/Kconfig
-@@ -62,6 +62,27 @@ config ARCH_SD5203
- 	help
- 	  Support for Hisilicon SD5203 SoC family
- 
-+# added by huxm on 2026-10-11
-+config ARCH_HI3798MX
-+	bool "Hisilicon HI3798MX family"
-+	select ARM_AMBA
-+	select HAVE_CLK
-+	select CLKDEV_LOOKUP
-+	select HAVE_SCHED_CLOCK
-+	select GENERIC_TIME
-+	select GENERIC_CLOCKEVENTS
-+	select ARCH_HAS_CPUFREQ
-+	select MIGHT_HAVE_PCI
-+	select HAVE_SMP
-+	select NEED_MACH_IO_H
-+	select NEED_MACH_MEMORY_H
-+	select ARCH_HAS_CPUFREQ
-+	select USB_ARCH_HAS_OHCI
-+	select USB_ARCH_HAS_EHCI
-+	select USB_ARCH_HAS_XHCI
-+	select ARM_HAS_SG_CHAIN
-+# end of added
-+
+@@ -86,3 +86,10 @@ config ARCH_HI3798MX
  endmenu
  
  endif
++
++
++# added by huxm on 2026-10-18
++if ARCH_HI3798MX		
++source "arch/arm/mach-hi3798mx/Kconfig"
++endif
++# end of added
+\ No newline at end of file
